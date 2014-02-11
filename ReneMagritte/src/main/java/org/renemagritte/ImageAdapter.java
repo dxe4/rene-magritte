@@ -1,6 +1,7 @@
 package org.renemagritte;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +11,20 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<String> itemList = new ArrayList<String>();
-
     private HashMap<Integer, ImageView> views;
-
+    private Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
     private final String BUNDLE_URI = "uri";
     private final String BUNDLE_POS = "pos";
     private final String BUNDLE_BM = "bm";
 
     public ImageAdapter(Context c) {
-
         mContext = c;
         views = new HashMap<Integer, ImageView>();
     }
@@ -58,13 +59,11 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-
-
-        Bundle b = new Bundle();
-        b.putString(BUNDLE_URI, itemList.get(position));
-        b.putInt(BUNDLE_POS, position);
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_URI, itemList.get(position));
+        bundle.putInt(BUNDLE_POS, position);
         views.put(position, imageView);
-        new LoadImage().execute(b);
+        new LoadImageTask(mContext, cache).execute(bundle);
         return imageView;
     }
 }
