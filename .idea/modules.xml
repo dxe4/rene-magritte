@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ReneMagritte/ReneMagritte.iml" filepath="$PROJECT_DIR$/ReneMagritte/ReneMagritte.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReneMagritteProject.iml" filepath="$PROJECT_DIR$/ReneMagritteProject.iml" />
+    </modules>
+  </component>
+</project>
+
