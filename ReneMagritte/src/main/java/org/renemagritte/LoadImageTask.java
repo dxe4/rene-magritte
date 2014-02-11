@@ -61,7 +61,7 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         BitmapFactory.decodeFile(path, options);
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
+        options.inJustDecodeBounds = true;
         bm = BitmapFactory.decodeFile(path, options);
         return bm;
     }
