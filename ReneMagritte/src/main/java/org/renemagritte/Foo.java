@@ -3,8 +3,12 @@ package org.renemagritte;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
-
+import android.support.v4.app.FragmentManager;
 import java.io.File;
 
 
@@ -17,6 +21,7 @@ public class Foo extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.foo_layout);
+
         initImages();
     }
 
