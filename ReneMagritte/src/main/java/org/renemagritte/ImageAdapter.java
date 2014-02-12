@@ -62,6 +62,7 @@ public class ImageAdapter extends BaseAdapter {
         bundle.putString(BUNDLE_URI, itemList.get(position));
         bundle.putInt(BUNDLE_POS, position);
         views.put(position, imageView);
+        imageView.setImageResource(R.drawable.ic_launcher);
         new LoadImageTask(mContext, views, cache).execute(bundle);
         return imageView;
     }
