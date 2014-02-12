@@ -50,10 +50,12 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
         super.onPostExecute(result);
         ImageView view = views.get(result.getInt(BUNDLE_POS));
         Bitmap bm = (Bitmap) result.getParcelable(BUNDLE_BM);
-        if (bm != null) {
-            view.setImageBitmap(bm);
-            view.setOnClickListener(new CustomOnClickListener(result.getString(BUNDLE_URI)));
+        String path = result.getString(BUNDLE_URI);
+        if (bm == null) {
+            bm = decodeSampledBitmapFromUri(path, 50, 50);
         }
+        view.setImageBitmap(bm);
+        view.setOnClickListener(new CustomOnClickListener(path));
     }
 
     public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
