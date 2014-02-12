@@ -11,21 +11,26 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<String> itemList = new ArrayList<String>();
-    private Map<Integer, ImageView> views = new ConcurrentHashMap<Integer,ImageView>();
-    private Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
+    private List<String> itemList;
+    private Map<Integer, ImageView> views;
+    private ImageLoadFactory imageLoadFactory;
+
     private final String BUNDLE_URI = "uri";
     private final String BUNDLE_POS = "pos";
     private final String BUNDLE_BM = "bm";
 
     public ImageAdapter(Context c) {
         mContext = c;
+        views = new ConcurrentHashMap<Integer,ImageView>();
+        itemList = new ArrayList<String>();
+        imageLoadFactory = ImageLoadFactory.getFactory(views, this.getClass());
     }
 
     void add(String path) {
@@ -63,7 +68,8 @@ public class ImageAdapter extends BaseAdapter {
         bundle.putInt(BUNDLE_POS, position);
         views.put(position, imageView);
         imageView.setImageResource(R.drawable.ic_launcher);
-        new LoadImageTask(mContext, views, cache).execute(bundle);
+        //new LoadImageTask(mContext, views, cache).execute(bundle);
+        imageLoadFactory.load(this.getClass(), bundle);
         return imageView;
     }
 }
