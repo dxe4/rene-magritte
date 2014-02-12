@@ -37,6 +37,7 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
         bm = cache.get(path);
         if (bm == null) { // not cached
             bm = decodeSampledBitmapFromUri(path, 50, 50);
+            cache.put(path,bm);
         }
         Bundle bundle = new Bundle();
         bundle.putParcelable(BUNDLE_BM, bm);
@@ -51,11 +52,11 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
         ImageView view = views.get(result.getInt(BUNDLE_POS));
         Bitmap bm = (Bitmap) result.getParcelable(BUNDLE_BM);
         String path = result.getString(BUNDLE_URI);
-        if (bm == null) {
-            bm = decodeSampledBitmapFromUri(path, 50, 50);
+        if (bm != null) {
+            view.setImageBitmap(bm);
+            view.setOnClickListener(new CustomOnClickListener(path));
         }
-        view.setImageBitmap(bm);
-        view.setOnClickListener(new CustomOnClickListener(path));
+
     }
 
     public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
@@ -63,7 +64,7 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         BitmapFactory.decodeFile(path, options);
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = true;
+        options.inJustDecodeBounds = false;
         bm = BitmapFactory.decodeFile(path, options);
         return bm;
     }
