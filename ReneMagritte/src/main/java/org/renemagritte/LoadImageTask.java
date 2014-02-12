@@ -20,13 +20,13 @@ public class LoadImageTask extends AsyncTask<Bundle, Void, Bundle> {
     private final String BUNDLE_POS = "pos";
     private final String BUNDLE_BM = "bm";
     private Context mContext;
-    private HashMap<Integer, ImageView> views;
+    private Map<Integer, ImageView> views;
     private Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
 
-    public LoadImageTask(Context c, Map<String, Bitmap> cache) {
+    public LoadImageTask(Context c,Map<Integer, ImageView> views, Map<String, Bitmap> cache) {
         this.cache = cache;
         mContext = c;
-        views = new HashMap<Integer, ImageView>();
+        this.views = views;
     }
 
     @Override

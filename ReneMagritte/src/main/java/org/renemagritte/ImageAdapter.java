@@ -18,7 +18,7 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<String> itemList = new ArrayList<String>();
-    private HashMap<Integer, ImageView> views;
+    private Map<Integer, ImageView> views = new ConcurrentHashMap<Integer,ImageView>();
     private Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
     private final String BUNDLE_URI = "uri";
     private final String BUNDLE_POS = "pos";
@@ -26,7 +26,6 @@ public class ImageAdapter extends BaseAdapter {
 
     public ImageAdapter(Context c) {
         mContext = c;
-        views = new HashMap<Integer, ImageView>();
     }
 
     void add(String path) {
@@ -63,7 +62,7 @@ public class ImageAdapter extends BaseAdapter {
         bundle.putString(BUNDLE_URI, itemList.get(position));
         bundle.putInt(BUNDLE_POS, position);
         views.put(position, imageView);
-        new LoadImageTask(mContext, cache).execute(bundle);
+        new LoadImageTask(mContext, views, cache).execute(bundle);
         return imageView;
     }
 }
