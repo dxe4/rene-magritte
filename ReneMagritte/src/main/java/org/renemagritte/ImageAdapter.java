@@ -1,8 +1,10 @@
 package org.renemagritte;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -28,9 +30,11 @@ public class ImageAdapter extends BaseAdapter {
 
     public ImageAdapter(Context c) {
         mContext = c;
-        views = new ConcurrentHashMap<Integer,ImageView>();
+        views = new ConcurrentHashMap<Integer, ImageView>();
         itemList = new ArrayList<String>();
-        imageLoadFactory = ImageLoadFactory.getFactory(views, this.getClass());
+        final int memClass = ((ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+        imageLoadFactory = ImageLoadFactory.getFactory(views, this.getClass(), cacheSize);
     }
 
     void add(String path) {

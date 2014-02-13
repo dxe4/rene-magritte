@@ -1,10 +1,12 @@
 package org.renemagritte;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,27 +17,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImageLoadFactory {
 
     private static ImageLoadFactory factory = null;
-    private static Map<String, Bitmap> cache;
+    private static LruCache<String, Bitmap> cache;
     private static Map<Class, Map<Integer, ImageView>> viewMap;
 
-    private ImageLoadFactory() {
-        cache = new ConcurrentHashMap<String, Bitmap>();
+    private ImageLoadFactory(int cacheSize) {
+        cache = new LruCache<String, Bitmap>(cacheSize);
         viewMap = new ConcurrentHashMap<Class, Map<Integer, ImageView>>();
     }
 
-    private static void initFactory(){
+    private static void initFactory(int cacheSize){
         if (factory == null) {
-            factory = new ImageLoadFactory();
+            factory = new ImageLoadFactory(cacheSize);
         }
     }
 
-    public static ImageLoadFactory getFactory() {
-        initFactory();
-        return factory;
-    }
+//    private static ImageLoadFactory getFactory() {
+//        initFactory();
+//        return factory;
+//    }
 
-    public static ImageLoadFactory getFactory(Map<Integer, ImageView> views, Class key) {
-        initFactory();
+    public static ImageLoadFactory getFactory(Map<Integer, ImageView> views, Class key, int cacheSize) {
+        initFactory(cacheSize);
         viewMap.put(key, views);
         return factory;
     }
@@ -63,7 +65,7 @@ public class ImageLoadFactory {
             String path = inputBundle.getString(BUNDLE_URI);
             bm = cache.get(path);
             if (bm == null) { // not cached
-                bm = decodeSampledBitmapFromUri(path, 50, 50);
+                bm = decodeSampledBitmapFromUri(path, 500, 500);
                 cache.put(path, bm);
             }
             Bundle bundle = new Bundle();
